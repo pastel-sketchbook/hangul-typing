@@ -10,11 +10,11 @@ The interface prioritizes **focus and clarity** for language learners. Every des
 
 A classic interior design principle applied to UI for visual harmony:
 
-| Proportion | Role | Colors | Usage |
-|------------|------|--------|-------|
-| **60%** | Dominant | Warm cream `#faf8f5`, `#f3f0eb` | Page background, recessed areas |
-| **30%** | Secondary | White `#ffffff`, dark text `#1a1a1a` | Cards, content surfaces |
-| **10%** | Accent | Soft teal `#5eb3b3` | CTAs, level badges, highlights, active states |
+| Proportion | Role      | Colors                             | Usage                            |
+|------------|-----------|------------------------------------|----------------------------------|
+| **60%**    | Dominant  | Warm cream `#faf8f5`, `#f3f0eb`    | Page background, recessed areas  |
+| **30%**    | Secondary | White `#ffffff`, dark text `#1a1a1a` | Cards, content surfaces        |
+| **10%**    | Accent    | Soft teal `#5eb3b3`                | CTAs, level badges, highlights, active states |
 
 ### Why This Palette?
 
@@ -36,13 +36,13 @@ The 10% accent appears only in:
 
 ### Font Stack
 
-| Purpose | Font | Fallback |
-|---------|------|----------|
-| UI Text | IBM Plex Sans | System sans-serif |
-| Code/Mono | IBM Plex Mono | System monospace |
-| Level Titles | IBM Plex Serif | System serif |
-| Korean (UI) | Noto Sans KR | Nanum Gothic |
-| Korean (Display) | Nanum Gothic | Noto Sans KR |
+| Purpose          | Font           | Fallback           |
+|------------------|----------------|--------------------|
+| UI Text          | IBM Plex Sans  | System sans-serif  |
+| Code/Mono        | IBM Plex Mono  | System monospace   |
+| Level Titles     | IBM Plex Serif | System serif       |
+| Korean (UI)      | Noto Sans KR   | Nanum Gothic       |
+| Korean (Display) | Nanum Gothic   | Noto Sans KR       |
 
 ### Why These Fonts?
 
@@ -126,13 +126,13 @@ Both pages are designed to fit entirely within the viewport - no scrolling requi
 
 ## Shadow System
 
-| Shadow | CSS Variable | Effect | Usage |
-|--------|--------------|--------|-------|
-| Small | `--shadow-sm` | Subtle lift | Cards, buttons |
-| Medium | `--shadow-md` | Elevated | Game area, hover states |
-| Large | `--shadow-lg` | Prominent | Result screen |
-| Inset | `--shadow-inset` | Recessed | Keyboard tray |
-| Glow | `--shadow-glow` | Focus ring | Active input |
+| Shadow | CSS Variable     | Effect     | Usage                    |
+|--------|------------------|------------|--------------------------|
+| Small  | `--shadow-sm`    | Subtle lift| Cards, buttons           |
+| Medium | `--shadow-md`    | Elevated   | Game area, hover states  |
+| Large  | `--shadow-lg`    | Prominent  | Result screen            |
+| Inset  | `--shadow-inset` | Recessed   | Keyboard tray            |
+| Glow   | `--shadow-glow`  | Focus ring | Active input             |
 
 ## Responsive Considerations
 

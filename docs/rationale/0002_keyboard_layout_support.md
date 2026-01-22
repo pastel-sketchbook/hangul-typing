@@ -51,12 +51,12 @@ A more ergonomic layout designed by Dr. Kong Byung-woo. "3-Bulsik" means "three-
 
 ### Highlight States
 
-| State | Color | Purpose |
-|-------|-------|---------|
-| Normal | White background | Default key state |
-| Highlight | `--accent-primary` (pastel blue) | Target key to press |
-| Highlight-Shift | `--accent-secondary` (pastel purple) | Shift + key required |
-| Pressed | Darker background | Visual feedback on keypress |
+| State           | Color                              | Purpose                     |
+|-----------------|------------------------------------|-----------------------------|
+| Normal          | White background                   | Default key state           |
+| Highlight       | `--accent-primary` (pastel blue)   | Target key to press         |
+| Highlight-Shift | `--accent-secondary` (pastel purple) | Shift + key required      |
+| Pressed         | Darker background                  | Visual feedback on keypress |
 
 ### Key Dimensions
 

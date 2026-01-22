@@ -14,9 +14,9 @@ A gamified typing trainer designed for non-Korean speakers. Progress through lev
 
 ## Screenshots
 
-| Level Selection | Typing |
-|-----------------|--------|
-| ![Level Selection](screenshots/level-select.png) | ![Typing](screenshots/typing.png) |
+| Level Selection                                  | Typing                               |
+|--------------------------------------------------|--------------------------------------|
+| ![Level Selection](screenshots/level-select.png) | ![Typing](screenshots/typing.png)    |
 
 ## Design Principles
 
@@ -29,12 +29,12 @@ A gamified typing trainer designed for non-Korean speakers. Progress through lev
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Core | Zig |
-| Runtime | WebAssembly |
-| Server | Zig HTTP (static) |
-| Frontend | HTML / CSS / JS |
+| Layer    | Technology         |
+|----------|--------------------|
+| Core     | Zig                |
+| Runtime  | WebAssembly        |
+| Server   | Zig HTTP (static)  |
+| Frontend | HTML / CSS / JS    |
 
 Built on [hangul-wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul decomposition, composition, and IME.
 

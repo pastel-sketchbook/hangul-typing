@@ -221,16 +221,16 @@ This allows the game to display Korean input in a styled `<div>` rather than an 
 
 ## WASM Exports Used
 
-| Export | Purpose |
-|--------|---------|
-| `wasm_ime_create()` | Create new IME instance, returns handle |
-| `wasm_ime_destroy(handle)` | Destroy IME instance |
-| `wasm_ime_reset(handle)` | Reset composition state |
-| `wasm_ime_processKey(handle, jamo, resultPtr)` | Process 2-Bulsik keystroke |
-| `wasm_ime_backspace(handle)` | Handle backspace, returns new codepoint |
-| `wasm_ime_commit(handle)` | Commit composition, returns final codepoint |
-| `wasm_alloc(size)` | Allocate WASM memory |
-| `wasm_free(ptr, size)` | Free WASM memory |
+| Export                                        | Purpose                                  |
+|-----------------------------------------------|------------------------------------------|
+| `wasm_ime_create()`                           | Create new IME instance, returns handle  |
+| `wasm_ime_destroy(handle)`                    | Destroy IME instance                     |
+| `wasm_ime_reset(handle)`                      | Reset composition state                  |
+| `wasm_ime_processKey(handle, jamo, resultPtr)`| Process 2-Bulsik keystroke               |
+| `wasm_ime_backspace(handle)`                  | Handle backspace, returns new codepoint  |
+| `wasm_ime_commit(handle)`                     | Commit composition, returns final codepoint |
+| `wasm_alloc(size)`                            | Allocate WASM memory                     |
+| `wasm_free(ptr, size)`                        | Free WASM memory                         |
 
 ## Memory Management
 
@@ -246,12 +246,12 @@ The WASM module uses a 16KB bump allocator that auto-resets when all allocations
 
 WASM returns one of these actions after processing a keystroke:
 
-| Action | Value | Meaning |
-|--------|-------|---------|
-| `ACTION_NO_CHANGE` | 0 | No visible change |
-| `ACTION_REPLACE` | 1 | Replace current composition character |
-| `ACTION_EMIT_AND_NEW` | 2 | Emit completed syllable, start new composition |
-| `ACTION_LITERAL` | 3 | Insert literal character (3-Bulsik only) |
+| Action             | Value | Meaning                                        |
+|--------------------|-------|------------------------------------------------|
+| `ACTION_NO_CHANGE` | 0     | No visible change                              |
+| `ACTION_REPLACE`   | 1     | Replace current composition character          |
+| `ACTION_EMIT_AND_NEW` | 2  | Emit completed syllable, start new composition |
+| `ACTION_LITERAL`   | 3     | Insert literal character (3-Bulsik only)       |
 
 ### Example: Typing "한글"
 
@@ -317,12 +317,12 @@ www/
 
 ## Performance Characteristics
 
-| Operation | Time | Notes |
-|-----------|------|-------|
-| WASM load | ~10ms | Async, non-blocking |
-| IME create | <1ms | Single allocation |
-| Keystroke | <0.1ms | O(1) operations |
-| Memory | 16KB | Static bump allocator |
+| Operation   | Time    | Notes                 |
+|-------------|---------|---------------------- |
+| WASM load   | ~10ms   | Async, non-blocking   |
+| IME create  | <1ms    | Single allocation     |
+| Keystroke   | <0.1ms  | O(1) operations       |
+| Memory      | 16KB    | Static bump allocator |
 
 ## Future Considerations
 
