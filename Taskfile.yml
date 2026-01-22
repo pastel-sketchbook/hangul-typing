@@ -1,0 +1,89 @@
+version: '3'
+
+vars:
+  VERSION:
+    sh: cat VERSION
+
+tasks:
+  default:
+    desc: Build WASM module
+    cmds:
+      - zig build
+
+  build:wasm:
+    desc: Build WASM module
+    cmds:
+      - zig build wasm
+
+  build:server:
+    desc: Build static file server
+    dir: server
+    cmds:
+      - zig build
+
+  dev:serve:
+    desc: Build all and run dev server
+    cmds:
+      - task: default
+      - task: build:server
+      - cd server && zig build run -- --root ../www
+
+  test:
+    desc: Run all tests
+    cmds:
+      - zig build test
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -rf zig-out .zig-cache
+      - rm -rf server/zig-out server/.zig-cache
+      - rm -f www/hangul-typing.wasm
+
+  fmt:
+    desc: Format Zig source files
+    cmds:
+      - zig fmt src/
+      - zig fmt build.zig
+      - zig fmt server/src/
+      - zig fmt server/build.zig
+
+  # Release tasks
+  release:patch:
+    desc: Release patch version (bug fixes)
+    cmds:
+      - task: fmt
+      - task: _bump-version
+        vars: { PART: patch }
+
+  release:minor:
+    desc: Release minor version (new features)
+    cmds:
+      - task: fmt
+      - task: _bump-version
+        vars: { PART: minor }
+
+  release:major:
+    desc: Release major version (breaking changes)
+    cmds:
+      - task: fmt
+      - task: _bump-version
+        vars: { PART: major }
+
+  _bump-version:
+    internal: true
+    cmds:
+      - |
+        current=$(cat VERSION)
+        IFS='.' read -r major minor patch <<< "$current"
+        case "{{.PART}}" in
+          major) major=$((major + 1)); minor=0; patch=0 ;;
+          minor) minor=$((minor + 1)); patch=0 ;;
+          patch) patch=$((patch + 1)) ;;
+        esac
+        new_version="$major.$minor.$patch"
+        echo "$new_version" > VERSION
+        git add VERSION
+        git commit -m "chore: bump version to $new_version"
+        git tag -a "v$new_version" -m "Release v$new_version"
+        echo "Released v$new_version"

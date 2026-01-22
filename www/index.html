@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangul Typing</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Hangul Typing</h1>
+            <p class="tagline">Learn Korean typing by playing. Break levels. Master Hangul.</p>
+        </header>
+
+        <main>
+            <!-- Level Selection -->
+            <section id="level-select" class="screen active">
+                <h2>Select Level</h2>
+                <div class="levels">
+                    <button class="level-btn" data-level="1">
+                        <span class="level-num">1</span>
+                        <span class="level-name">Basic Vowels</span>
+                        <span class="level-chars">ㅏ ㅓ ㅗ ㅜ ㅡ ㅣ</span>
+                    </button>
+                    <button class="level-btn locked" data-level="2">
+                        <span class="level-num">2</span>
+                        <span class="level-name">Basic Consonants</span>
+                        <span class="level-chars">ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㅇ ㅈ</span>
+                    </button>
+                    <button class="level-btn locked" data-level="3">
+                        <span class="level-num">3</span>
+                        <span class="level-name">Simple Syllables</span>
+                        <span class="level-chars">가 나 다 마</span>
+                    </button>
+                    <button class="level-btn locked" data-level="4">
+                        <span class="level-num">4</span>
+                        <span class="level-name">Final Consonants</span>
+                        <span class="level-chars">간 날 달 말</span>
+                    </button>
+                    <button class="level-btn locked" data-level="5">
+                        <span class="level-num">5</span>
+                        <span class="level-name">Double Consonants</span>
+                        <span class="level-chars">ㄲ ㄸ ㅃ ㅆ ㅉ</span>
+                    </button>
+                    <button class="level-btn locked" data-level="6">
+                        <span class="level-num">6</span>
+                        <span class="level-name">Complex Vowels</span>
+                        <span class="level-chars">ㅐ ㅔ ㅚ ㅟ ㅢ</span>
+                    </button>
+                    <button class="level-btn locked" data-level="7">
+                        <span class="level-num">7</span>
+                        <span class="level-name">Common Words</span>
+                        <span class="level-chars">한국 사람 감사</span>
+                    </button>
+                    <button class="level-btn locked" data-level="8">
+                        <span class="level-num">8</span>
+                        <span class="level-name">Short Phrases</span>
+                        <span class="level-chars">안녕하세요</span>
+                    </button>
+                    <button class="level-btn locked" data-level="9">
+                        <span class="level-num">9</span>
+                        <span class="level-name">Full Sentences</span>
+                        <span class="level-chars">오늘 날씨가 좋아요</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Game Screen -->
+            <section id="game" class="screen">
+                <div class="game-header">
+                    <button id="back-btn" class="icon-btn" title="Back to levels">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="game-info">
+                        <span id="level-display">Level 1</span>
+                        <span id="score-display">Score: 0</span>
+                        <span id="accuracy-display">100%</span>
+                    </div>
+                </div>
+
+                <div class="game-area">
+                    <div id="target" class="target">ㅏ</div>
+                    <div id="input-display" class="input-display"></div>
+                    <div id="feedback" class="feedback"></div>
+                </div>
+
+                <div class="progress-bar">
+                    <div id="progress" class="progress"></div>
+                </div>
+            </section>
+
+            <!-- Result Screen -->
+            <section id="result" class="screen">
+                <div class="result-content">
+                    <h2 id="result-title">Level Complete!</h2>
+                    <div class="stars" id="stars">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <div class="result-stats">
+                        <p>Accuracy: <span id="final-accuracy">100%</span></p>
+                        <p>Score: <span id="final-score">0</span></p>
+                    </div>
+                    <div class="result-actions">
+                        <button id="retry-btn" class="btn">Try Again</button>
+                        <button id="next-btn" class="btn primary">Next Level</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Built with <a href="https://github.com/pastel-sketchbook/hangul-wasm">hangul-wasm</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
