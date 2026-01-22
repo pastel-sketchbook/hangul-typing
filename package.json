@@ -1,13 +1,24 @@
 {
   "name": "hangul-typing",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Learn Korean typing by playing. Break levels. Master Hangul.",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build www/src/app.ts --outdir www --minify",
+    "build:watch": "bun build www/src/app.ts --outdir www --watch",
+    "fmt": "bunx biome check --write www/src",
+    "fmt:check": "bunx biome check www/src",
+    "lint": "bunx biome lint www/src",
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/ibm-plex-serif": "^5.2.7",
     "@fontsource/nanum-gothic": "^5.2.7",
-    "@fontsource/noto-sans-kr": "^5.2.9"
+    "@fontsource/noto-sans-kr": "^5.2.9",
+    "typescript": "^5.7.3"
   }
 }

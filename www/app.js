@@ -2,14 +2,15 @@
  * Hangul Typing - Game Application
  * Learn Korean typing by playing. Break levels. Master Hangul.
  * 
- * Uses hangul-wasm v0.7.0 for authentic Korean IME composition
+ * Uses hangul-wasm for authentic Korean IME composition with
+ * a pure TypeScript fallback for environments where WASM is unavailable.
  */
 
-import { HangulIme } from './hangul-ime.js';
+import { createIme } from './hangul-ime-loader.js';
 
-// WASM module and IME instance
-let wasmModule = null;
+// IME instance (WASM or fallback)
 let ime = null;
+let imeType = 'unknown'; // 'wasm' or 'fallback'
 
 // Game state
 const state = {
@@ -165,20 +166,17 @@ async function init() {
     // Load saved progress
     loadProgress();
     
-    // Load hangul-wasm WASM module for IME
+    // Load IME (WASM with TypeScript fallback)
     try {
-        const response = await fetch('hangul.wasm');
-        const bytes = await response.arrayBuffer();
-        wasmModule = await WebAssembly.instantiate(bytes);
+        const result = await createIme({ debug: false });
+        ime = result.ime;
+        imeType = result.type;
         
-        // Create IME instance
-        ime = new HangulIme(wasmModule, { debug: false });
-        ime.enable();
-        
-        console.log('hangul-wasm IME loaded successfully');
+        console.log(`Hangul IME loaded: ${imeType}`);
+        updateImeStatus(imeType);
     } catch (err) {
-        console.error('Failed to load hangul-wasm:', err);
-        // Game will still work but without proper IME composition
+        console.error('Failed to load IME:', err);
+        updateImeStatus('none');
     }
     
     // Setup event listeners
@@ -187,6 +185,25 @@ async function init() {
     // Update UI
     updateLevelButtons();
     showScreen('level-select');
+}
+
+/**
+ * Update IME status in footer
+ */
+function updateImeStatus(type) {
+    const statusEl = document.getElementById('ime-status');
+    if (!statusEl) return;
+    
+    if (type === 'wasm') {
+        statusEl.textContent = 'IME: WASM';
+        statusEl.title = 'Using hangul-wasm for Korean input';
+    } else if (type === 'fallback') {
+        statusEl.textContent = 'IME: JS';
+        statusEl.title = 'Using TypeScript fallback for Korean input';
+    } else {
+        statusEl.textContent = 'IME: None';
+        statusEl.title = 'Korean IME not available';
+    }
 }
 
 /**

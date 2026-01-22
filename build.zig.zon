@@ -1,0 +1,20 @@
+.{
+    .name = .hangul_typing,
+    .version = "0.2.1",
+    .fingerprint = 0x51e748597a0bdf5a,
+    .minimum_zig_version = "0.14.0",
+
+    .dependencies = .{
+        .hangul_wasm = .{
+            .url = "https://github.com/pastel-sketchbook/hangul-wasm/archive/refs/tags/v0.7.2.tar.gz",
+            .hash = "hangul_wasm-0.7.2-n9ZlfhxiAQDQkrpubC9B5NnxizlYAdRIqRzMdo4UHTGh",
+        },
+    },
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "www",
+    },
+}

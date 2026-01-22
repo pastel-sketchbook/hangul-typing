@@ -6,14 +6,20 @@ vars:
 
 tasks:
   default:
-    desc: Build WASM module
+    desc: Build WASM module and TypeScript
     cmds:
       - zig build
+      - bun build www/src/hangul-ime-loader.ts --outdir www --target=browser --format=esm
 
   build:wasm:
     desc: Build WASM module
     cmds:
       - zig build wasm
+
+  build:ts:
+    desc: Build TypeScript IME loader
+    cmds:
+      - bun build www/src/hangul-ime-loader.ts --outdir www --target=browser --format=esm
 
   build:server:
     desc: Build static file server

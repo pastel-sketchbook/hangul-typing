@@ -1,26 +1,39 @@
 // Hangul Typing - WASM Entry Point
 // A gamified typing trainer for learning Hangul
+//
+// This module re-exports hangul-wasm's IME functionality and adds
+// game-specific state management.
 
 const std = @import("std");
+const hangul = @import("hangul");
 
 // ===================
-// WASM Exports
+// Re-export hangul-wasm IME functions
 // ===================
 
-/// Allocator for WASM memory management
-var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-const allocator = gpa.allocator();
+// IME instance management
+pub const wasm_ime_create = hangul.wasm_ime_create;
+pub const wasm_ime_destroy = hangul.wasm_ime_destroy;
+pub const wasm_ime_reset = hangul.wasm_ime_reset;
+pub const wasm_ime_processKey = hangul.wasm_ime_processKey;
+pub const wasm_ime_processKey3 = hangul.wasm_ime_processKey3;
+pub const wasm_ime_backspace = hangul.wasm_ime_backspace;
+pub const wasm_ime_commit = hangul.wasm_ime_commit;
+pub const wasm_ime_getState = hangul.wasm_ime_getState;
 
-/// Allocate memory for JavaScript interop
-export fn wasm_alloc(len: usize) ?[*]u8 {
-    const slice = allocator.alloc(u8, len) catch return null;
-    return slice.ptr;
-}
+// Core Hangul functions
+pub const wasm_isHangulSyllable = hangul.wasm_isHangulSyllable;
+pub const wasm_decompose = hangul.wasm_decompose;
+pub const wasm_compose = hangul.wasm_compose;
+pub const wasm_hasFinal = hangul.wasm_hasFinal;
+pub const wasm_getInitial = hangul.wasm_getInitial;
+pub const wasm_getMedial = hangul.wasm_getMedial;
+pub const wasm_getFinal = hangul.wasm_getFinal;
 
-/// Free memory allocated by wasm_alloc
-export fn wasm_free(ptr: [*]u8, len: usize) void {
-    allocator.free(ptr[0..len]);
-}
+// Memory management (use hangul-wasm's allocator for consistency)
+pub const wasm_alloc = hangul.wasm_alloc;
+pub const wasm_free = hangul.wasm_free;
+pub const wasm_alloc_reset = hangul.wasm_alloc_reset;
 
 // ===================
 // Game State
@@ -189,4 +202,12 @@ test "invalid level returns false" {
     wasm_reset();
     try std.testing.expect(!wasm_start_level(0));
     try std.testing.expect(!wasm_start_level(10));
+}
+
+// Test that hangul module is properly imported
+test "hangul module imported correctly" {
+    // Test isHangulSyllable
+    try std.testing.expect(hangul.isHangulSyllable(0xAC00)); // 가
+    try std.testing.expect(hangul.isHangulSyllable(0xD55C)); // 한
+    try std.testing.expect(!hangul.isHangulSyllable(0x0041)); // A
 }

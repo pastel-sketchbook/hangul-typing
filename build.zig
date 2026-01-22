@@ -12,15 +12,26 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // ===================
+    // Import hangul-wasm dependency
+    // ===================
+    const hangul_wasm_dep = b.dependency("hangul_wasm", .{});
+    const hangul_module = hangul_wasm_dep.module("hangul");
+
+    // ===================
     // WASM Library
     // ===================
+    const wasm_module = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = wasm_target,
+        .optimize = .ReleaseSmall,
+        .imports = &.{
+            .{ .name = "hangul", .module = hangul_module },
+        },
+    });
+
     const wasm = b.addExecutable(.{
         .name = "hangul-typing",
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/main.zig"),
-            .target = wasm_target,
-            .optimize = .ReleaseSmall,
-        }),
+        .root_module = wasm_module,
     });
     wasm.entry = .disabled;
     wasm.rdynamic = true;
@@ -36,12 +47,17 @@ pub fn build(b: *std.Build) void {
     // ===================
     // Tests
     // ===================
+    const test_module = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = native_target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "hangul", .module = hangul_module },
+        },
+    });
+
     const unit_tests = b.addTest(.{
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/main.zig"),
-            .target = native_target,
-            .optimize = optimize,
-        }),
+        .root_module = test_module,
     });
 
     const run_unit_tests = b.addRunArtifact(unit_tests);
