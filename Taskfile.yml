@@ -9,7 +9,7 @@ tasks:
     desc: Build WASM module and TypeScript
     cmds:
       - zig build
-      - bun build www/src/hangul-ime-loader.ts --outdir www --target=browser --format=esm
+      - bun run build
 
   build:wasm:
     desc: Build WASM module
@@ -17,9 +17,9 @@ tasks:
       - zig build wasm
 
   build:ts:
-    desc: Build TypeScript IME loader
+    desc: Build TypeScript app
     cmds:
-      - bun build www/src/hangul-ime-loader.ts --outdir www --target=browser --format=esm
+      - bun run build
 
   build:server:
     desc: Build static file server
@@ -36,16 +36,24 @@ tasks:
   run:dev:
     desc: Run Tauri desktop app in development mode
     cmds:
-      - task: default
       - cargo tauri dev
+
+  dev:server:
+    desc: Start frontend dev server for Tauri
+    cmds:
+      - task: default
+      - task: build:server
+      - cd server && zig build run -- --root ../www --port 8230
 
   run:web:
     desc: Start web dev server and open browser
     cmds:
+      - task: default
+      - task: build:server
       - |
         echo "Starting server on http://127.0.0.1:8230"
         open http://127.0.0.1:8230
-        cd www && python3 -m http.server 8230
+        cd server && zig build run -- --root ../www --port 8230
 
   dev:serve:
     desc: Build all and run Zig dev server

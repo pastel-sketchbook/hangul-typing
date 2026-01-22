@@ -12,17 +12,20 @@ const log = std.log.scoped(.server);
 const allowed_files = [_][]const u8{
     "/",
     "/index.html",
+    "/splash.html",
     "/hangul-typing.wasm",
     "/hangul.wasm",
-    "/hangul-ime.js",
     "/style.css",
-    "/app.js",
+    "/korean-fonts.css",
     "/favicon.svg",
+    "/VERSION",
 };
 
 /// Allowed path prefixes (for directories like fonts/)
 const allowed_prefixes = [_][]const u8{
     "/fonts/",
+    "/dist/",
+    "/icons/",
 };
 
 /// MIME type mappings

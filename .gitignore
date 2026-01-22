@@ -5,6 +5,9 @@ zig-out/
 # WASM output (built artifact)
 www/hangul-typing.wasm
 
+# TypeScript build output
+www/dist/
+
 # Task cache
 .task/
 
