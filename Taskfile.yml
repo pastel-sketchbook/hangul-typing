@@ -119,11 +119,11 @@ tasks:
         echo "$new_version" > VERSION
         cp VERSION www/VERSION
         
-        # Update Tauri config version
-        sed -i '' 's/"version": "[^"]*"/"version": "'"$new_version"'"/' src-tauri/tauri.conf.json
+        # Update Tauri config version (macOS sed)
+        sed -i.bak 's/"version": "[^"]*"/"version": "'$new_version'"/' src-tauri/tauri.conf.json && rm src-tauri/tauri.conf.json.bak
         
-        # Update Cargo.toml version
-        sed -i '' 's/^version = "[^"]*"/version = "'"$new_version"'"/' src-tauri/Cargo.toml
+        # Update Cargo.toml version (macOS sed)
+        sed -i.bak 's/^version = "[^"]*"/version = "'$new_version'"/' src-tauri/Cargo.toml && rm src-tauri/Cargo.toml.bak
         
         # Stage and commit
         git add VERSION www/VERSION src-tauri/tauri.conf.json src-tauri/Cargo.toml

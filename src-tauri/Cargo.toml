@@ -1,12 +1,12 @@
 [package]
 name = "hangul-typing"
-version = "0.2.3"
+version = "0.3.0"
 description = "Learn Korean typing by playing. Break levels. Master Hangul."
 authors = ["Pastel Sketchbook"]
-license = "MIT"
+license = "GPL-2.0-or-later"
 repository = "https://github.com/pastel-sketchbook/hangul-typing"
-edition = "2021"
-rust-version = "1.77.2"
+edition = "2024"
+rust-version = "1.92.0"
 
 [lib]
 name = "hangul_typing_lib"
@@ -16,8 +16,8 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2.5.3", features = [] }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde_json = "1.0.149"
+serde = { version = "1.0.228", features = ["derive"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
 tauri = { version = "2.9.5", features = [] }
