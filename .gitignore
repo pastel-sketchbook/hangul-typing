@@ -18,3 +18,4 @@ www/hangul-typing.wasm
 
 # Node (if used for testing)
 node_modules/
+hangul-wasm-codebase.md

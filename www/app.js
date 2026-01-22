@@ -11,7 +11,58 @@ const state = {
     currentLevel: 1,
     unlockedLevels: [1],
     screen: 'level-select',
+    keyboardLayout: '2-bulsik', // Future: support '3-bulsik'
 };
+
+/**
+ * 2-Bulsik (두벌식) Keyboard Layout
+ * Standard Korean keyboard layout
+ * Maps physical keys to Hangul jamo
+ */
+const KEYBOARD_2BULSIK = {
+    // Row 1: QWERTYUIOP
+    'q': { normal: 'ㅂ', shift: 'ㅃ' },
+    'w': { normal: 'ㅈ', shift: 'ㅉ' },
+    'e': { normal: 'ㄷ', shift: 'ㄸ' },
+    'r': { normal: 'ㄱ', shift: 'ㄲ' },
+    't': { normal: 'ㅅ', shift: 'ㅆ' },
+    'y': { normal: 'ㅛ', shift: 'ㅛ' },
+    'u': { normal: 'ㅕ', shift: 'ㅕ' },
+    'i': { normal: 'ㅑ', shift: 'ㅑ' },
+    'o': { normal: 'ㅐ', shift: 'ㅒ' },
+    'p': { normal: 'ㅔ', shift: 'ㅖ' },
+    
+    // Row 2: ASDFGHJKL
+    'a': { normal: 'ㅁ', shift: 'ㅁ' },
+    's': { normal: 'ㄴ', shift: 'ㄴ' },
+    'd': { normal: 'ㅇ', shift: 'ㅇ' },
+    'f': { normal: 'ㄹ', shift: 'ㄹ' },
+    'g': { normal: 'ㅎ', shift: 'ㅎ' },
+    'h': { normal: 'ㅗ', shift: 'ㅗ' },
+    'j': { normal: 'ㅓ', shift: 'ㅓ' },
+    'k': { normal: 'ㅏ', shift: 'ㅏ' },
+    'l': { normal: 'ㅣ', shift: 'ㅣ' },
+    
+    // Row 3: ZXCVBNM
+    'z': { normal: 'ㅋ', shift: 'ㅋ' },
+    'x': { normal: 'ㅌ', shift: 'ㅌ' },
+    'c': { normal: 'ㅊ', shift: 'ㅊ' },
+    'v': { normal: 'ㅍ', shift: 'ㅍ' },
+    'b': { normal: 'ㅠ', shift: 'ㅠ' },
+    'n': { normal: 'ㅜ', shift: 'ㅜ' },
+    'm': { normal: 'ㅡ', shift: 'ㅡ' },
+};
+
+/**
+ * Reverse mapping: Hangul jamo to physical key
+ */
+const JAMO_TO_KEY = {};
+for (const [key, mapping] of Object.entries(KEYBOARD_2BULSIK)) {
+    JAMO_TO_KEY[mapping.normal] = { key, shift: false };
+    if (mapping.shift !== mapping.normal) {
+        JAMO_TO_KEY[mapping.shift] = { key, shift: true };
+    }
+}
 
 // Level data
 const levels = {
@@ -85,6 +136,8 @@ const elements = {
     finalScore: document.getElementById('final-score'),
     retryBtn: document.getElementById('retry-btn'),
     nextBtn: document.getElementById('next-btn'),
+    keyboard: document.getElementById('keyboard'),
+    keys: document.querySelectorAll('.key[data-key]'),
 };
 
 // Game session state
@@ -189,6 +242,9 @@ function handleKeyDown(e) {
     
     // Ignore non-printable keys
     if (e.key.length !== 1) return;
+    
+    // Show key press feedback
+    showKeyPress(e.key);
     
     // Add to buffer
     session.inputBuffer += e.key;
@@ -336,6 +392,9 @@ function updateGameDisplay() {
     elements.progress.style.width = `${progress}%`;
     elements.feedback.textContent = '';
     elements.feedback.className = 'feedback';
+    
+    // Highlight keys for current target
+    highlightKeysForTarget(target);
 }
 
 /**
@@ -411,6 +470,77 @@ function saveProgress() {
         }));
     } catch (err) {
         console.warn('Failed to save progress:', err);
+    }
+}
+
+// ===================
+// Keyboard Highlighting
+// ===================
+
+/**
+ * Highlight keys for the target character
+ * Supports single jamo and composed syllables
+ */
+function highlightKeysForTarget(target) {
+    // Clear all highlights
+    clearKeyboardHighlights();
+    
+    if (!target) return;
+    
+    // For single jamo, highlight the key directly
+    if (target.length === 1) {
+        const jamo = target;
+        highlightJamo(jamo);
+    }
+    // For composed syllables or words, highlight first jamo
+    // (In future, could decompose syllable and show sequence)
+}
+
+/**
+ * Highlight a single jamo on the keyboard
+ */
+function highlightJamo(jamo) {
+    const keyInfo = JAMO_TO_KEY[jamo];
+    if (!keyInfo) return;
+    
+    const keyElement = document.querySelector(`.key[data-key="${keyInfo.key}"]`);
+    if (keyElement) {
+        if (keyInfo.shift) {
+            keyElement.classList.add('highlight-shift');
+            // Also highlight shift key
+            const shiftKey = document.querySelector('.key[data-key="shift"]');
+            if (shiftKey) {
+                shiftKey.classList.add('highlight');
+            }
+        } else {
+            keyElement.classList.add('highlight');
+        }
+    }
+}
+
+/**
+ * Clear all keyboard highlights
+ */
+function clearKeyboardHighlights() {
+    elements.keys.forEach(key => {
+        key.classList.remove('highlight', 'highlight-shift', 'pressed');
+    });
+    const shiftKey = document.querySelector('.key[data-key="shift"]');
+    if (shiftKey) {
+        shiftKey.classList.remove('highlight', 'pressed');
+    }
+}
+
+/**
+ * Show key press feedback
+ */
+function showKeyPress(keyChar) {
+    const keyElement = document.querySelector(`.key[data-key="${keyChar.toLowerCase()}"]`);
+    if (keyElement) {
+        keyElement.classList.add('pressed');
+        setTimeout(() => {
+            keyElement.classList.remove('pressed');
+        }, 100);
     }
 }
 

@@ -339,3 +339,140 @@ footer a:hover {
         flex-direction: column;
     }
 }
+
+/* ===================
+ * Keyboard Visualization
+ * 2-Bulsik (두벌식) Layout
+ * =================== */
+
+.keyboard {
+    margin: var(--space-xl) auto;
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    max-width: 600px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+}
+
+.keyboard-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Offset rows like a real keyboard */
+.keyboard-row:nth-child(2) {
+    padding-left: 20px;
+}
+
+.keyboard-row:nth-child(3) {
+    padding-left: 0;
+}
+
+.key {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.key .hangul {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+}
+
+.key .shift {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.key .label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.key.shift-key {
+    width: 72px;
+    font-size: 0.8rem;
+}
+
+/* Key states */
+.key.highlight {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(168, 216, 234, 0.4);
+}
+
+.key.highlight .hangul {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.key.highlight-shift {
+    background: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(170, 150, 218, 0.4);
+}
+
+.key.highlight-shift .shift {
+    font-size: 1.3rem;
+    position: static;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.key.highlight-shift .hangul {
+    display: none;
+}
+
+.key.pressed {
+    transform: scale(0.95);
+    background: var(--bg-secondary);
+}
+
+/* Responsive keyboard */
+@media (max-width: 600px) {
+    .keyboard {
+        padding: var(--space-sm);
+    }
+    
+    .key {
+        width: 32px;
+        height: 40px;
+    }
+    
+    .key .hangul {
+        font-size: 1rem;
+    }
+    
+    .key .shift {
+        font-size: 0.5rem;
+    }
+    
+    .key.shift-key {
+        width: 48px;
+        font-size: 0.6rem;
+    }
+    
+    .keyboard-row:nth-child(2) {
+        padding-left: 12px;
+    }
+}
