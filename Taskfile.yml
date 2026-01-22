@@ -133,8 +133,11 @@ tasks:
         # Update Cargo.toml version (macOS sed)
         sed -i.bak 's/^version = "[^"]*"/version = "'$new_version'"/' src-tauri/Cargo.toml && rm src-tauri/Cargo.toml.bak
         
+        # Update Cargo.lock (regenerate with new version)
+        cd src-tauri && cargo update -p hangul-typing && cd ..
+        
         # Stage and commit
-        git add VERSION www/VERSION src-tauri/tauri.conf.json src-tauri/Cargo.toml
+        git add VERSION www/VERSION src-tauri/tauri.conf.json src-tauri/Cargo.toml src-tauri/Cargo.lock
         git commit -m "chore: bump version to $new_version"
         git tag -a "v$new_version" -m "Release v$new_version"
         echo "Released v$new_version"
