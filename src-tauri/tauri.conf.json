@@ -1,22 +1,23 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Hangul Typing",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "identifier": "com.pastelsketchbook.hangul-typing",
   "build": {
     "frontendDist": "../www",
     "devUrl": "http://localhost:8230",
-    "beforeDevCommand": "",
+    "beforeDevCommand": "task dev:server",
     "beforeBuildCommand": "task default"
   },
   "app": {
+    "macOSPrivateApi": true,
     "windows": [
       {
         "label": "splash",
         "title": "Hangul Typing",
         "url": "splash.html",
         "width": 400,
-        "height": 300,
+        "height": 420,
         "resizable": false,
         "fullscreen": false,
         "center": true,
