@@ -21,8 +21,16 @@ tasks:
     cmds:
       - zig build
 
+  run:
+    desc: Start dev server and open browser
+    cmds:
+      - |
+        echo "Starting server on http://127.0.0.1:8230"
+        open http://127.0.0.1:8230
+        cd www && python3 -m http.server 8230
+
   dev:serve:
-    desc: Build all and run dev server
+    desc: Build all and run Zig dev server
     cmds:
       - task: default
       - task: build:server
