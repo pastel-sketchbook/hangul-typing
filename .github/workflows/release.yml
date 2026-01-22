@@ -14,6 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Zig
         uses: mlugg/setup-zig@v1
@@ -37,6 +39,38 @@ jobs:
       - name: Build frontend (WASM + TypeScript)
         run: task default
 
+      - name: Generate release notes
+        run: |
+          VERSION=${{ github.ref_name }}
+          
+          # Get previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 ${VERSION}^ 2>/dev/null || echo "")
+          
+          # Generate changelog
+          if [ -n "$PREV_TAG" ]; then
+            CHANGELOG=$(git log ${PREV_TAG}..${VERSION} --pretty=format:"- %s" --no-merges | grep -v "^- chore: bump version" || echo "")
+          else
+            CHANGELOG=$(git log ${VERSION} --pretty=format:"- %s" --no-merges | grep -v "^- chore: bump version" | head -20 || echo "")
+          fi
+          
+          # Default if empty
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="- Minor improvements and bug fixes"
+          fi
+          
+          # Write release notes
+          cat > /tmp/release-notes.md << EOF
+          ## Hangul Typing ${VERSION}
+
+          Learn Korean typing by playing. Break levels. Master Hangul.
+
+          ### Downloads
+          - **macOS (Apple Silicon)**: \`Hangul.Typing_*.dmg\`
+
+          ### Changes
+          ${CHANGELOG}
+          EOF
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
@@ -44,15 +78,6 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: "Hangul Typing ${{ github.ref_name }}"
-          releaseBody: |
-            ## Hangul Typing ${{ github.ref_name }}
-
-            Learn Korean typing by playing. Break levels. Master Hangul.
-
-            ### Downloads
-            - **macOS (Apple Silicon)**: `Hangul.Typing_*.dmg`
-
-            ### What's New
-            See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+          releaseBodyPath: /tmp/release-notes.md
           releaseDraft: false
           prerelease: false
