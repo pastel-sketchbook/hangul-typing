@@ -18,4 +18,5 @@ www/hangul-typing.wasm
 
 # Node (if used for testing)
 node_modules/
+bun.lock
 hangul-wasm-codebase.md

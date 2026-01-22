@@ -35,7 +35,7 @@ This repository contains `hangul-typing`, a gamified typing trainer for non-Kore
 - Level-based progression from basic jamo to full sentences
 - Game mechanics: scoring, level breaking, progress tracking
 - Real-time Hangul composition feedback as users type
-- Professional presentation with pastel colors and line-only icons
+- Professional presentation with 60:30:10 color rule and line-only icons
 - Built on [hangul-wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul processing
 - Compiled to WebAssembly for browser execution
 - Served via Zig HTTP static server
@@ -59,8 +59,12 @@ This repository contains `hangul-typing`, a gamified typing trainer for non-Kore
 ## Visual Identity
 
 - **Professional presentation** - Clean, polished, trustworthy interface
-- **Pastel color palette** - Soft, calming tones that reduce eye strain
+- **60:30:10 color rule** - Visual harmony through balanced color distribution:
+  - **60% Dominant**: Warm cream backgrounds (`#faf8f5`, `#f3f0eb`)
+  - **30% Secondary**: White cards (`#ffffff`) and neutral text (`#1a1a1a`, `#4a4a4a`)
+  - **10% Accent**: Soft teal (`#5eb3b3`) for CTAs, level badges, progress bars, and active states only
 - **Line-only icons** - Minimal, consistent iconography (no filled icons)
+- **No gradients on UI elements** - Solid colors maintain the 60:30:10 balance
 
 ## User Experience
 
@@ -192,7 +196,7 @@ A behavioral commit:
 
 - Are there tests for the new logic?
 - Does the game mechanic work correctly?
-- Is the UI consistent with design principles (pastel colors, line icons)?
+- Is the UI consistent with design principles (60:30:10 color rule, line icons)?
 - Are errors handled gracefully without panicking?
 - Does the change follow "Tidy First" separation?
 - Is the user experience intuitive for non-Korean speakers?
@@ -201,7 +205,7 @@ A behavioral commit:
 
 - Complex animations that distract from learning
 - Punishing failure mechanics (keep it encouraging)
-- Filled icons or non-pastel color schemes
+- Filled icons or colors outside the 60:30:10 palette
 - Panicking on invalid input (use graceful handling)
 
 # DOCUMENTATION CONVENTION

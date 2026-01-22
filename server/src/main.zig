@@ -20,6 +20,11 @@ const allowed_files = [_][]const u8{
     "/favicon.svg",
 };
 
+/// Allowed path prefixes (for directories like fonts/)
+const allowed_prefixes = [_][]const u8{
+    "/fonts/",
+};
+
 /// MIME type mappings
 const MimeType = struct {
     ext: []const u8,
@@ -35,6 +40,9 @@ const mime_types = [_]MimeType{
     .{ .ext = ".png", .mime = "image/png" },
     .{ .ext = ".json", .mime = "application/json; charset=utf-8" },
     .{ .ext = ".ico", .mime = "image/x-icon" },
+    .{ .ext = ".woff2", .mime = "font/woff2" },
+    .{ .ext = ".woff", .mime = "font/woff" },
+    .{ .ext = ".ttf", .mime = "font/ttf" },
 };
 
 fn getMimeType(path: []const u8) []const u8 {
@@ -47,8 +55,15 @@ fn getMimeType(path: []const u8) []const u8 {
 }
 
 fn isAllowedPath(path: []const u8) bool {
+    // Check exact matches
     for (allowed_files) |allowed| {
         if (std.mem.eql(u8, path, allowed)) {
+            return true;
+        }
+    }
+    // Check prefix matches (for directories like fonts/)
+    for (allowed_prefixes) |prefix| {
+        if (std.mem.startsWith(u8, path, prefix)) {
             return true;
         }
     }

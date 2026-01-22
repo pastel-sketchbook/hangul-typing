@@ -1,0 +1,13 @@
+{
+  "name": "hangul-typing",
+  "version": "0.1.0",
+  "description": "Learn Korean typing by playing. Break levels. Master Hangul.",
+  "private": true,
+  "devDependencies": {
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/ibm-plex-serif": "^5.2.7",
+    "@fontsource/nanum-gothic": "^5.2.7",
+    "@fontsource/noto-sans-kr": "^5.2.9"
+  }
+}

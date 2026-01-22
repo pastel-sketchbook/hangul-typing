@@ -15,7 +15,10 @@ A gamified typing trainer designed for non-Korean speakers. Progress through lev
 ## Design Principles
 
 - **Professional presentation** - Clean, polished interface
-- **Pastel color palette** - Soft, focused visual tone
+- **60:30:10 color rule** - Visual harmony through balanced color distribution
+  - 60% warm cream backgrounds (`#faf8f5`)
+  - 30% white cards and neutral text (`#ffffff`, `#1a1a1a`)
+  - 10% soft teal accent for CTAs and highlights (`#5eb3b3`)
 - **Line-only icons** - Minimal, consistent iconography
 
 ## Tech Stack
