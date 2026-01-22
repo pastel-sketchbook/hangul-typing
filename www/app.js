@@ -1,25 +1,29 @@
 /**
  * Hangul Typing - Game Application
  * Learn Korean typing by playing. Break levels. Master Hangul.
+ * 
+ * Uses hangul-wasm v0.7.0 for authentic Korean IME composition
  */
 
-// WASM module instance
-let wasm = null;
+import { HangulIme } from './hangul-ime.js';
+
+// WASM module and IME instance
+let wasmModule = null;
+let ime = null;
 
 // Game state
 const state = {
     currentLevel: 1,
     unlockedLevels: [1],
     screen: 'level-select',
-    keyboardLayout: '2-bulsik', // Future: support '3-bulsik'
+    keyboardLayout: '2-bulsik',
 };
 
 /**
- * 2-Bulsik (두벌식) Keyboard Layout
- * Standard Korean keyboard layout
- * Maps physical keys to Hangul jamo
+ * 2-Bulsik Keyboard Layout - Maps physical keys to display jamo
+ * Used for visual keyboard display (not IME processing)
  */
-const KEYBOARD_2BULSIK = {
+const KEYBOARD_DISPLAY = {
     // Row 1: QWERTYUIOP
     'q': { normal: 'ㅂ', shift: 'ㅃ' },
     'w': { normal: 'ㅈ', shift: 'ㅉ' },
@@ -54,10 +58,10 @@ const KEYBOARD_2BULSIK = {
 };
 
 /**
- * Reverse mapping: Hangul jamo to physical key
+ * Reverse mapping: Hangul jamo to physical key (for keyboard highlighting)
  */
 const JAMO_TO_KEY = {};
-for (const [key, mapping] of Object.entries(KEYBOARD_2BULSIK)) {
+for (const [key, mapping] of Object.entries(KEYBOARD_DISPLAY)) {
     JAMO_TO_KEY[mapping.normal] = { key, shift: false };
     if (mapping.shift !== mapping.normal) {
         JAMO_TO_KEY[mapping.shift] = { key, shift: true };
@@ -148,7 +152,7 @@ let session = {
     score: 0,
     correct: 0,
     total: 0,
-    inputBuffer: '',
+    inputBuffer: '',  // Composed Hangul text
 };
 
 /**
@@ -158,19 +162,20 @@ async function init() {
     // Load saved progress
     loadProgress();
     
-    // Load WASM module
+    // Load hangul-wasm WASM module for IME
     try {
-        const response = await fetch('hangul-typing.wasm');
+        const response = await fetch('hangul.wasm');
         const bytes = await response.arrayBuffer();
-        const { instance } = await WebAssembly.instantiate(bytes, {
-            env: {
-                // Add any required imports here
-            },
-        });
-        wasm = instance.exports;
-        console.log('WASM module loaded');
+        wasmModule = await WebAssembly.instantiate(bytes);
+        
+        // Create IME instance
+        ime = new HangulIme(wasmModule, { debug: false });
+        ime.enable();
+        
+        console.log('hangul-wasm IME loaded successfully');
     } catch (err) {
-        console.warn('WASM module not available, using JS fallback');
+        console.error('Failed to load hangul-wasm:', err);
+        // Game will still work but without proper IME composition
     }
     
     // Setup event listeners
@@ -197,6 +202,7 @@ function setupEventListeners() {
     
     // Back button
     elements.backBtn.addEventListener('click', () => {
+        if (ime) ime.reset();
         showScreen('level-select');
     });
     
@@ -214,53 +220,148 @@ function setupEventListeners() {
         }
     });
     
-    // Keyboard input
+    // Keyboard input - use keydown for all handling
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keypress', handleKeyPress);
 }
 
 /**
- * Handle keyboard input
+ * Handle keydown events (for special keys)
  */
 function handleKeyDown(e) {
     if (state.screen !== 'game') return;
     
-    // Ignore modifier keys
+    // Ignore modifier combos
     if (e.ctrlKey || e.altKey || e.metaKey) return;
     
-    // Handle backspace
+    // Handle backspace with IME
     if (e.key === 'Backspace') {
-        session.inputBuffer = session.inputBuffer.slice(0, -1);
-        updateInputDisplay();
+        e.preventDefault();
+        handleBackspace();
         return;
     }
     
     // Handle Enter to submit
     if (e.key === 'Enter') {
+        e.preventDefault();
         submitInput();
         return;
     }
     
-    // Ignore non-printable keys
+    // Handle Space - commit composition and add space (for multi-word targets)
+    if (e.key === ' ') {
+        if (ime && ime.hasComposition) {
+            ime.reset();
+        }
+        // For single-char targets, space submits
+        const target = session.targets[session.currentIndex];
+        if (target.length === 1) {
+            e.preventDefault();
+            submitInput();
+        } else {
+            // For multi-word targets, add space to buffer
+            session.inputBuffer += ' ';
+            updateInputDisplay();
+        }
+        return;
+    }
+}
+
+/**
+ * Handle keypress events (for character input)
+ */
+function handleKeyPress(e) {
+    if (state.screen !== 'game') return;
+    
+    // Ignore modifier combos
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    
+    // Only handle single printable characters
     if (e.key.length !== 1) return;
+    
+    e.preventDefault();
     
     // Show key press feedback
     showKeyPress(e.key);
     
-    // Add to buffer
-    session.inputBuffer += e.key;
-    updateInputDisplay();
+    // Process through IME if available
+    if (ime) {
+        processKeyWithIme(e.key);
+    } else {
+        // Fallback: just add the character directly
+        session.inputBuffer += e.key;
+        updateInputDisplay();
+    }
     
-    // Auto-submit for single characters
+    // Auto-submit for single characters (jamo levels)
     const target = session.targets[session.currentIndex];
-    if (target.length === 1) {
+    if (target.length === 1 && session.inputBuffer.length >= 1) {
         submitInput();
     }
+}
+
+/**
+ * Process a key through the hangul-wasm IME
+ */
+function processKeyWithIme(char) {
+    // Create a fake input field for IME to work with
+    const fakeField = {
+        value: session.inputBuffer,
+        selectionStart: session.inputBuffer.length,
+        selectionEnd: session.inputBuffer.length,
+    };
+    
+    // Create a fake event
+    const fakeEvent = { key: char };
+    
+    // Process through IME - it handles layout mapping internally
+    const handled = ime.handleKeyPress(fakeEvent, fakeField);
+    
+    if (handled) {
+        session.inputBuffer = fakeField.value;
+        updateInputDisplay();
+    } else {
+        // IME didn't handle it (not a Korean key), add directly
+        session.inputBuffer += char;
+        updateInputDisplay();
+    }
+}
+
+/**
+ * Handle backspace with IME decomposition
+ */
+function handleBackspace() {
+    if (!session.inputBuffer) return;
+    
+    if (ime && ime.hasComposition) {
+        // Create fake field for IME
+        const fakeField = {
+            value: session.inputBuffer,
+            selectionStart: session.inputBuffer.length,
+            selectionEnd: session.inputBuffer.length,
+        };
+        
+        const handled = ime.handleBackspace(fakeField);
+        
+        if (handled) {
+            session.inputBuffer = fakeField.value;
+            updateInputDisplay();
+            return;
+        }
+    }
+    
+    // Fallback: simple character deletion
+    session.inputBuffer = session.inputBuffer.slice(0, -1);
+    updateInputDisplay();
 }
 
 /**
  * Start a level
  */
 function startLevel(level) {
+    // Reset IME state
+    if (ime) ime.reset();
+    
     session = {
         level,
         targets: generateTargets(level),
@@ -270,11 +371,6 @@ function startLevel(level) {
         total: 0,
         inputBuffer: '',
     };
-    
-    // Initialize WASM state if available
-    if (wasm && wasm.wasm_start_level) {
-        wasm.wasm_start_level(level);
-    }
     
     updateGameDisplay();
     showScreen('game');
@@ -300,6 +396,11 @@ function generateTargets(level) {
  * Submit current input
  */
 function submitInput() {
+    // Commit any pending IME composition
+    if (ime && ime.hasComposition) {
+        ime.reset();
+    }
+    
     const target = session.targets[session.currentIndex];
     const input = session.inputBuffer;
     
@@ -312,11 +413,6 @@ function submitInput() {
         showFeedback('Correct!', 'correct');
     } else {
         showFeedback(`Expected: ${target}`, 'incorrect');
-    }
-    
-    // Update WASM state
-    if (wasm && wasm.wasm_submit_input) {
-        wasm.wasm_submit_input(target.charCodeAt(0), input.charCodeAt(0) || 0);
     }
     
     // Clear input and advance
@@ -492,8 +588,8 @@ function highlightKeysForTarget(target) {
         const jamo = target;
         highlightJamo(jamo);
     }
-    // For composed syllables or words, highlight first jamo
-    // (In future, could decompose syllable and show sequence)
+    // For composed syllables or words, we could decompose and show sequence
+    // TODO: Use wasm_decompose to show key sequence for syllables
 }
 
 /**
