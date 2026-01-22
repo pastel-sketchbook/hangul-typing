@@ -2,6 +2,12 @@
 
 Learn Korean typing by playing. Break levels. Master Hangul.
 
+## Screenshots
+
+| Level Selection | Typing |
+|-----------------|--------|
+| ![Level Selection](screenshots/level-select.png) | ![Typing](screenshots/typing.png) |
+
 ## About
 
 A gamified typing trainer designed for non-Korean speakers. Progress through levels, build muscle memory, and unlock new challenges as you learn to type Hangul naturally.
