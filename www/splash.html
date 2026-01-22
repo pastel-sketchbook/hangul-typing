@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #faf8f5 0%, #e8f4f4 50%, #5eb3b3 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .splash-icon {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .splash-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 36px;
+            box-shadow: 0 8px 32px rgba(94, 179, 179, 0.3);
+        }
+        
+        .app-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        
+        .loading-text {
+            font-size: 14px;
+            color: #4a4a4a;
+            opacity: 0.8;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+        
+        .powered-by {
+            position: absolute;
+            bottom: 20px;
+            font-size: 12px;
+            color: #4a4a4a;
+            opacity: 0.7;
+        }
+        
+        .powered-by a {
+            color: #5eb3b3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-icon">
+        <img src="icons/app-icon.png" alt="Hangul Typing">
+    </div>
+    <div class="app-name">Hangul Typing</div>
+    <div class="loading-text">Loading<span class="loading-dots"></span></div>
+    <div class="powered-by">Powered by <a href="https://github.com/pastel-sketchbook/hangul-wasm" target="_blank">hangul.wasm</a></div>
+</body>
+</html>

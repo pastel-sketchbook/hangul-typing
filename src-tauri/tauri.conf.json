@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Hangul Typing",
+  "version": "0.2.3",
+  "identifier": "com.pastelsketchbook.hangul-typing",
+  "build": {
+    "frontendDist": "../www",
+    "devUrl": "http://localhost:8230",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "task default"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "splash",
+        "title": "Hangul Typing",
+        "url": "splash.html",
+        "width": 400,
+        "height": 300,
+        "resizable": false,
+        "fullscreen": false,
+        "center": true,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true
+      },
+      {
+        "label": "main",
+        "title": "Hangul Typing",
+        "url": "index.html",
+        "width": 1024,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'"
+    },
+    "withGlobalTauri": true
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["dmg", "app"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns"
+    ],
+    "category": "Education",
+    "shortDescription": "Learn Korean typing by playing",
+    "longDescription": "A gamified typing trainer for non-Korean speakers. Break levels. Master Hangul.",
+    "copyright": "© 2025 Pastel Sketchbook",
+    "macOS": {
+      "minimumSystemVersion": "11.0"
+    }
+  }
+}

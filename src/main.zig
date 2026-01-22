@@ -1,14 +1,14 @@
 // Hangul Typing - WASM Entry Point
 // A gamified typing trainer for learning Hangul
 //
-// This module re-exports hangul-wasm's IME functionality and adds
+// This module re-exports hangul.wasm's IME functionality and adds
 // game-specific state management.
 
 const std = @import("std");
 const hangul = @import("hangul");
 
 // ===================
-// Re-export hangul-wasm IME functions
+// Re-export hangul.wasm IME functions
 // ===================
 
 // IME instance management
@@ -30,7 +30,7 @@ pub const wasm_getInitial = hangul.wasm_getInitial;
 pub const wasm_getMedial = hangul.wasm_getMedial;
 pub const wasm_getFinal = hangul.wasm_getFinal;
 
-// Memory management (use hangul-wasm's allocator for consistency)
+// Memory management (use hangul.wasm's allocator for consistency)
 pub const wasm_alloc = hangul.wasm_alloc;
 pub const wasm_free = hangul.wasm_free;
 pub const wasm_alloc_reset = hangul.wasm_alloc_reset;

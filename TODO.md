@@ -6,7 +6,7 @@
 - [x] Initialize Zig project with build.zig
 - [x] Set up Taskfile.yml with build:wasm, build:ts, dev:serve, test tasks
 - [x] Create static HTML/CSS/JS scaffold
-- [x] Integrate hangul-wasm as dependency (v0.7.2 via build.zig.zon)
+- [x] Integrate hangul.wasm as dependency (v0.7.2 via build.zig.zon)
 - [x] Set up Zig HTTP server for static file serving
 - [x] Add TypeScript IME fallback with unified loader
 - [x] Add IME status indicator in footer (WASM vs JS)
@@ -42,7 +42,7 @@
 
 ### Documentation
 - [x] Add screenshots to README
-- [x] Create rationale docs (level progression, keyboard layout, visual design, hangul-wasm integration)
+- [x] Create rationale docs (level progression, keyboard layout, visual design, hangul.wasm integration)
 
 ---
 
@@ -82,3 +82,16 @@
 ### Mobile Support
 - [ ] Responsive design for mobile screens
 - [ ] Touch keyboard support
+
+### Desktop App (Tauri) - macOS Only
+- [x] Initialize Tauri project structure (src-tauri/)
+- [x] Configure Tauri for Zig WASM + static assets
+- [x] Set up Taskfile tasks (run, run:dev, build:tauri)
+- [x] Add app metadata (name, version, description, identifier)
+- [x] Configure window settings (size, resizable, title, center)
+- [x] Configure macOS bundle targets (dmg, app)
+- [x] Replace default Tauri icons with app-specific icons ('한' line graphic)
+- [ ] Optimize fonts for bundle size (use system Korean fonts on macOS)
+- [ ] Test localStorage persistence in Tauri webview
+- [ ] Add auto-update support (optional)
+- [ ] Code sign for macOS distribution (optional)

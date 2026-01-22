@@ -33,10 +33,49 @@ A gamified typing trainer designed for non-Korean speakers. Progress through lev
 |----------|--------------------|
 | Core     | Zig                |
 | Runtime  | WebAssembly        |
-| Server   | Zig HTTP (static)  |
+| Desktop  | Tauri (macOS)      |
 | Frontend | HTML / CSS / JS    |
 
-Built on [hangul-wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul decomposition, composition, and IME.
+Powered by [hangul.wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul decomposition, composition, and IME.
+
+## Getting Started
+
+### Prerequisites
+
+- [Zig](https://ziglang.org/) (0.13+)
+- [Bun](https://bun.sh/) (for TypeScript build)
+- [Task](https://taskfile.dev/) (task runner)
+- [Rust](https://rustup.rs/) (for Tauri desktop app)
+
+### Development
+
+```bash
+# Build WASM and TypeScript
+task default
+
+# Run desktop app (development mode)
+task run:dev
+
+# Run as web app
+task run:web
+```
+
+### Building
+
+```bash
+# Build Tauri desktop app for macOS
+task build:tauri
+
+# Output: target/release/bundle/macos/Hangul Typing.app
+```
+
+### Release
+
+```bash
+task release:patch  # Bug fixes (0.3.0 → 0.3.1)
+task release:minor  # New features (0.3.0 → 0.4.0)
+task release:major  # Breaking changes (0.3.0 → 1.0.0)
+```
 
 ## License
 

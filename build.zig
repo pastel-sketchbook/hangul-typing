@@ -12,7 +12,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // ===================
-    // Import hangul-wasm dependency
+    // Import hangul.wasm dependency
     // ===================
     const hangul_wasm_dep = b.dependency("hangul_wasm", .{});
     const hangul_module = hangul_wasm_dep.module("hangul");

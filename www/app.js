@@ -2,7 +2,7 @@
  * Hangul Typing - Game Application
  * Learn Korean typing by playing. Break levels. Master Hangul.
  * 
- * Uses hangul-wasm for authentic Korean IME composition with
+ * Uses hangul.wasm for authentic Korean IME composition with
  * a pure TypeScript fallback for environments where WASM is unavailable.
  */
 
@@ -160,6 +160,9 @@ let session = {
  * Initialize the application
  */
 async function init() {
+    const splashMinTime = 3000;
+    const splashStart = Date.now();
+    
     // Load and display version
     loadVersion();
     
@@ -185,6 +188,20 @@ async function init() {
     // Update UI
     updateLevelButtons();
     showScreen('level-select');
+    
+    // Close splash screen if running in Tauri (after minimum display time)
+    if (window.__TAURI__) {
+        const elapsed = Date.now() - splashStart;
+        const remaining = Math.max(0, splashMinTime - elapsed);
+        
+        setTimeout(async () => {
+            try {
+                await window.__TAURI__.core.invoke('close_splash');
+            } catch (e) {
+                console.log('Not running in Tauri or splash already closed');
+            }
+        }, remaining);
+    }
 }
 
 /**
@@ -196,7 +213,7 @@ function updateImeStatus(type) {
     
     if (type === 'wasm') {
         statusEl.textContent = 'IME: WASM';
-        statusEl.title = 'Using hangul-wasm for Korean input';
+        statusEl.title = 'Using hangul.wasm for Korean input';
     } else if (type === 'fallback') {
         statusEl.textContent = 'IME: JS';
         statusEl.title = 'Using TypeScript fallback for Korean input';
@@ -321,7 +338,7 @@ function handleKeyPress(e) {
 }
 
 /**
- * Process a key through the hangul-wasm IME
+ * Process a key through the hangul.wasm IME
  */
 function processKeyWithIme(char) {
     // Create a fake input field for IME to work with

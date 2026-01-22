@@ -28,7 +28,19 @@ tasks:
       - zig build
 
   run:
-    desc: Start dev server and open browser
+    desc: Build and run Tauri desktop app (release)
+    cmds:
+      - task: build:tauri
+      - open ./src-tauri/target/release/bundle/macos/Hangul\ Typing.app
+
+  run:dev:
+    desc: Run Tauri desktop app in development mode
+    cmds:
+      - task: default
+      - cargo tauri dev
+
+  run:web:
+    desc: Start web dev server and open browser
     cmds:
       - |
         echo "Starting server on http://127.0.0.1:8230"
@@ -61,6 +73,12 @@ tasks:
       - zig fmt build.zig
       - zig fmt server/src/
       - zig fmt server/build.zig
+
+  # Tauri tasks
+  build:tauri:
+    desc: Build Tauri desktop app for macOS (release)
+    cmds:
+      - cargo tauri build
 
   # Release tasks
   release:patch:
@@ -96,9 +114,19 @@ tasks:
           patch) patch=$((patch + 1)) ;;
         esac
         new_version="$major.$minor.$patch"
+        
+        # Update VERSION files
         echo "$new_version" > VERSION
         cp VERSION www/VERSION
-        git add VERSION www/VERSION
+        
+        # Update Tauri config version
+        sed -i '' 's/"version": "[^"]*"/"version": "'"$new_version"'"/' src-tauri/tauri.conf.json
+        
+        # Update Cargo.toml version
+        sed -i '' 's/^version = "[^"]*"/version = "'"$new_version"'"/' src-tauri/Cargo.toml
+        
+        # Stage and commit
+        git add VERSION www/VERSION src-tauri/tauri.conf.json src-tauri/Cargo.toml
         git commit -m "chore: bump version to $new_version"
         git tag -a "v$new_version" -m "Release v$new_version"
         echo "Released v$new_version"

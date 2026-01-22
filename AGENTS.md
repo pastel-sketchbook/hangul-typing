@@ -36,7 +36,7 @@ This repository contains `hangul-typing`, a gamified typing trainer for non-Kore
 - Game mechanics: scoring, level breaking, progress tracking
 - Real-time Hangul composition feedback as users type
 - Professional presentation with 60:30:10 color rule and line-only icons
-- Built on [hangul-wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul processing
+- Powered by [hangul.wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul processing
 - Compiled to WebAssembly for browser execution
 - Served via Zig HTTP static server
 
