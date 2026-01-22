@@ -349,6 +349,10 @@ header h1 {
     letter-spacing: 0;
 }
 
+.version-tag:empty {
+    display: none;
+}
+
 .tagline {
     color: var(--text-secondary);
     font-size: var(--font-size-base);
@@ -490,6 +494,10 @@ header h1 {
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-light);
+}
+
+.game-header .version-tag {
+    margin-left: auto;
 }
 
 .icon-btn {

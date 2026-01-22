@@ -552,13 +552,22 @@ async function loadVersion() {
         const response = await fetch('VERSION');
         if (response.ok) {
             const version = (await response.text()).trim();
-            const versionTag = document.getElementById('version-tag');
-            if (versionTag) {
-                versionTag.textContent = `v${version}`;
-            }
+            const versionText = `v${version}`;
+            
+            // Update all version tags
+            const versionTags = [
+                document.getElementById('version-tag'),
+                document.getElementById('game-version-tag'),
+            ];
+            
+            versionTags.forEach(tag => {
+                if (tag) {
+                    tag.textContent = versionText;
+                }
+            });
         }
     } catch (err) {
-        // Version display is non-critical, fail silently
+        console.warn('Failed to load version:', err);
     }
 }
 
