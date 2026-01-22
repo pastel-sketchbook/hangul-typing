@@ -9,7 +9,11 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
-    <div class="container">
+    <div id="loading" class="loading">
+        <p>Loading...</p>
+    </div>
+
+    <div class="container" id="app" style="display: none;">
         <header>
             <h1>Hangul Typing <span class="version-tag" id="version-tag"></span></h1>
             <p class="tagline">Learn Korean typing by playing. Break levels. Master Hangul.</p>
@@ -81,7 +85,6 @@
                         <span id="score-display">Score: 0</span>
                         <span id="accuracy-display">100%</span>
                     </div>
-                    <span class="version-tag" id="game-version-tag"></span>
                 </div>
 
                 <div class="game-area">
@@ -159,6 +162,6 @@
         </footer>
     </div>
 
-    <script type="module" src="app.js"></script>
+    <script type="module" src="dist/app.js"></script>
 </body>
 </html>
