@@ -91,7 +91,8 @@ tasks:
         esac
         new_version="$major.$minor.$patch"
         echo "$new_version" > VERSION
-        git add VERSION
+        cp VERSION www/VERSION
+        git add VERSION www/VERSION
         git commit -m "chore: bump version to $new_version"
         git tag -a "v$new_version" -m "Release v$new_version"
         echo "Released v$new_version"

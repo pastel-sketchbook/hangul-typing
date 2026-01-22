@@ -159,6 +159,9 @@ let session = {
  * Initialize the application
  */
 async function init() {
+    // Load and display version
+    loadVersion();
+    
     // Load saved progress
     loadProgress();
     
@@ -539,6 +542,24 @@ function updateLevelButtons() {
             btn.classList.add('locked');
         }
     });
+}
+
+/**
+ * Load and display version from VERSION file
+ */
+async function loadVersion() {
+    try {
+        const response = await fetch('VERSION');
+        if (response.ok) {
+            const version = (await response.text()).trim();
+            const versionTag = document.getElementById('version-tag');
+            if (versionTag) {
+                versionTag.textContent = `v${version}`;
+            }
+        }
+    } catch (err) {
+        // Version display is non-critical, fail silently
+    }
 }
 
 /**

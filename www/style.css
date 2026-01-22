@@ -334,6 +334,21 @@ header h1 {
     letter-spacing: -0.02em;
 }
 
+.version-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--accent-primary-dark);
+    background: var(--accent-primary-bg);
+    border: 1px solid var(--accent-primary);
+    padding: 0.15em 0.5em;
+    border-radius: var(--radius-sm);
+    vertical-align: middle;
+    margin-left: var(--space-sm);
+    letter-spacing: 0;
+}
+
 .tagline {
     color: var(--text-secondary);
     font-size: var(--font-size-base);
