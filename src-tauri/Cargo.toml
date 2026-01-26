@@ -1,6 +1,6 @@
 [package]
 name = "hangul-typing"
-version = "0.4.1"
+version = "0.4.2"
 description = "Learn Korean typing by playing. Break levels. Master Hangul."
 authors = ["Pastel Sketchbook"]
 license = "GPL-2.0-or-later"
