@@ -3,7 +3,186 @@
  * 2-Bulsik (두벌식) keyboard layout for visual display
  */
 
+import { KEY_PRESS_ANIMATION_MS } from './constants'
 import type { JamoKeyInfo, KeyMapping } from './types'
+
+// ===================
+// Hangul Decomposition
+// ===================
+
+/** Hangul syllable block range */
+const HANGUL_BASE = 0xac00
+const HANGUL_END = 0xd7a3
+
+/** Jamo counts for syllable composition */
+const MEDIAL_COUNT = 21
+const FINAL_COUNT = 28
+
+/** Initial consonants (초성) in syllable order */
+const INITIALS = [
+  'ㄱ',
+  'ㄲ',
+  'ㄴ',
+  'ㄷ',
+  'ㄸ',
+  'ㄹ',
+  'ㅁ',
+  'ㅂ',
+  'ㅃ',
+  'ㅅ',
+  'ㅆ',
+  'ㅇ',
+  'ㅈ',
+  'ㅉ',
+  'ㅊ',
+  'ㅋ',
+  'ㅌ',
+  'ㅍ',
+  'ㅎ',
+]
+
+/** Medial vowels (중성) in syllable order */
+const MEDIALS = [
+  'ㅏ',
+  'ㅐ',
+  'ㅑ',
+  'ㅒ',
+  'ㅓ',
+  'ㅔ',
+  'ㅕ',
+  'ㅖ',
+  'ㅗ',
+  'ㅘ',
+  'ㅙ',
+  'ㅚ',
+  'ㅛ',
+  'ㅜ',
+  'ㅝ',
+  'ㅞ',
+  'ㅟ',
+  'ㅠ',
+  'ㅡ',
+  'ㅢ',
+  'ㅣ',
+]
+
+/** Final consonants (종성) in syllable order - index 0 is no final */
+const FINALS = [
+  '',
+  'ㄱ',
+  'ㄲ',
+  'ㄳ',
+  'ㄴ',
+  'ㄵ',
+  'ㄶ',
+  'ㄷ',
+  'ㄹ',
+  'ㄺ',
+  'ㄻ',
+  'ㄼ',
+  'ㄽ',
+  'ㄾ',
+  'ㄿ',
+  'ㅀ',
+  'ㅁ',
+  'ㅂ',
+  'ㅄ',
+  'ㅅ',
+  'ㅆ',
+  'ㅇ',
+  'ㅈ',
+  'ㅊ',
+  'ㅋ',
+  'ㅌ',
+  'ㅍ',
+  'ㅎ',
+]
+
+/** Compound vowel decomposition (for key sequences) */
+const COMPOUND_VOWELS: Record<string, string[]> = {
+  ㅘ: ['ㅗ', 'ㅏ'],
+  ㅙ: ['ㅗ', 'ㅐ'],
+  ㅚ: ['ㅗ', 'ㅣ'],
+  ㅝ: ['ㅜ', 'ㅓ'],
+  ㅞ: ['ㅜ', 'ㅔ'],
+  ㅟ: ['ㅜ', 'ㅣ'],
+  ㅢ: ['ㅡ', 'ㅣ'],
+}
+
+/** Compound final consonant decomposition (for key sequences) */
+const COMPOUND_FINALS: Record<string, string[]> = {
+  ㄳ: ['ㄱ', 'ㅅ'],
+  ㄵ: ['ㄴ', 'ㅈ'],
+  ㄶ: ['ㄴ', 'ㅎ'],
+  ㄺ: ['ㄹ', 'ㄱ'],
+  ㄻ: ['ㄹ', 'ㅁ'],
+  ㄼ: ['ㄹ', 'ㅂ'],
+  ㄽ: ['ㄹ', 'ㅅ'],
+  ㄾ: ['ㄹ', 'ㅌ'],
+  ㄿ: ['ㄹ', 'ㅍ'],
+  ㅀ: ['ㄹ', 'ㅎ'],
+  ㅄ: ['ㅂ', 'ㅅ'],
+}
+
+/**
+ * Check if a character is a Hangul syllable block
+ */
+export function isHangulSyllable(char: string): boolean {
+  const code = char.charCodeAt(0)
+  return code >= HANGUL_BASE && code <= HANGUL_END
+}
+
+/**
+ * Decompose a Hangul syllable into its jamo components
+ * Returns array of individual jamo to type (with compound jamo expanded)
+ */
+export function decomposeSyllable(syllable: string): string[] {
+  if (!isHangulSyllable(syllable)) {
+    // Not a syllable, return as-is (might be a standalone jamo)
+    return [syllable]
+  }
+
+  const code = syllable.charCodeAt(0) - HANGUL_BASE
+  const initialIdx = Math.floor(code / (MEDIAL_COUNT * FINAL_COUNT))
+  const medialIdx = Math.floor((code % (MEDIAL_COUNT * FINAL_COUNT)) / FINAL_COUNT)
+  const finalIdx = code % FINAL_COUNT
+
+  const result: string[] = []
+
+  // Initial consonant
+  result.push(INITIALS[initialIdx])
+
+  // Medial vowel (may be compound)
+  const medial = MEDIALS[medialIdx]
+  if (COMPOUND_VOWELS[medial]) {
+    result.push(...COMPOUND_VOWELS[medial])
+  } else {
+    result.push(medial)
+  }
+
+  // Final consonant (may be compound or absent)
+  if (finalIdx > 0) {
+    const final = FINALS[finalIdx]
+    if (COMPOUND_FINALS[final]) {
+      result.push(...COMPOUND_FINALS[final])
+    } else {
+      result.push(final)
+    }
+  }
+
+  return result
+}
+
+/**
+ * Decompose a string of characters into jamo sequence
+ */
+export function decomposeString(str: string): string[] {
+  const result: string[] = []
+  for (const char of str) {
+    result.push(...decomposeSyllable(char))
+  }
+  return result
+}
 
 /**
  * 2-Bulsik Keyboard Layout - Maps physical keys to display jamo
@@ -86,11 +265,14 @@ export class KeyboardHighlighter {
     this.clear()
     if (!target) return
 
-    // For single jamo, highlight the key directly
-    if (target.length === 1) {
-      this.highlightJamo(target)
+    // Decompose the first character into jamo sequence
+    const firstChar = target[0]
+    const jamos = decomposeSyllable(firstChar)
+
+    // Highlight all jamo in the sequence
+    for (const jamo of jamos) {
+      this.highlightJamo(jamo)
     }
-    // TODO: For composed syllables, decompose and show sequence
   }
 
   /**
@@ -122,7 +304,7 @@ export class KeyboardHighlighter {
       keyElement.classList.add('pressed')
       setTimeout(() => {
         keyElement.classList.remove('pressed')
-      }, 100)
+      }, KEY_PRESS_ANIMATION_MS)
     }
   }
 }
