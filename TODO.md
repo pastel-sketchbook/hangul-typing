@@ -38,6 +38,7 @@
 - [x] Create level completion celebration (stars, pass/fail)
 - [x] Design level selection screen
 - [x] Add key highlighting for target characters
+- [x] Add keyboard highlighting for composed syllables (decompose and show sequence)
 - [x] Add version display in footer
 
 ### Documentation
@@ -50,11 +51,17 @@
 
 ### UI/UX Polish
 - [ ] Create line-only icon set (currently using Unicode symbols)
-- [ ] Add keyboard highlighting for composed syllables (decompose and show sequence)
 
 ---
 
 ## Future Enhancements
+
+### Code Quality
+- [x] Extract hardcoded values to named constants (splash time, points per correct, star thresholds)
+- [ ] Sync level thresholds between TypeScript (levels.ts) and Zig (main.zig) - single source of truth
+- [ ] Add debug-mode logging utility to reduce production console noise
+- [ ] Add DOM element null-safety validation (runtime checks for getElementById)
+- [ ] Add WASM cleanup on page unload (beforeunload event)
 
 ### Game Features
 - [ ] Add sound effects for keypress/correct/incorrect
@@ -69,10 +76,16 @@
 - [ ] Add pronunciation audio (optional)
 
 ### Testing
-- [ ] Unit tests for scoring logic
-- [ ] Unit tests for level progression
+- [x] Unit tests for scoring logic
+- [x] Unit tests for level progression
 - [ ] Integration tests for keyboard input
 - [ ] Browser tests for UI feedback
+- [x] Unit tests for ui.ts (screen transitions, star display)
+- [ ] Unit tests for app.ts (main game logic, input handling)
+- [ ] Unit tests for hangul-ime-loader.ts (WASM loading)
+- [ ] Unit tests for hangul-ime-fallback.ts (Korean IME composition)
+- [x] Unit tests for keyboard.ts (key highlighting, JAMO mapping)
+- [x] Unit tests for storage.ts (localStorage persistence)
 
 ### Accessibility
 - [ ] Add keyboard shortcuts for navigation

@@ -7,6 +7,7 @@
  */
 
 import { initAssistant, recordMistake, updateContext } from './assistant-ui'
+import { POINTS_PER_CORRECT, SPLASH_MIN_TIME_MS } from './constants'
 import { createIme, type IHangulIme } from './hangul-ime-loader'
 import { KeyboardHighlighter } from './keyboard'
 import { generateTargets, getLevelThreshold, LEVEL_COUNT } from './levels'
@@ -56,7 +57,6 @@ let session: GameSession = {
 // ===================
 
 async function init(): Promise<void> {
-  const splashMinTime = 3000
   const splashStart = Date.now()
 
   // Get DOM references
@@ -87,7 +87,7 @@ async function init(): Promise<void> {
   })
 
   // Close Tauri splash after delay
-  closeSplashAfterDelay(splashStart, splashMinTime)
+  closeSplashAfterDelay(splashStart, SPLASH_MIN_TIME_MS)
 }
 
 async function initIme(): Promise<void> {
@@ -280,7 +280,7 @@ function submitInput(): void {
 
   if (input === target) {
     session.correct++
-    session.score += 10
+    session.score += POINTS_PER_CORRECT
     showFeedback(elements.feedback, 'Correct!', 'correct')
   } else {
     showFeedback(elements.feedback, `Expected: ${target}`, 'incorrect')

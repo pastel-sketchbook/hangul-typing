@@ -2,6 +2,7 @@
  * UI management - DOM elements and screen transitions
  */
 
+import { STAR_2_THRESHOLD, STAR_3_THRESHOLD } from './constants'
 import type { Elements, ScreenName, Screens } from './types'
 
 /**
@@ -141,7 +142,9 @@ export function updateStars(starsEl: HTMLElement, accuracy: number, threshold: n
   for (let i = 0; i < starElements.length; i++) {
     const star = starElements[i]
     const shouldBeActive =
-      (i === 0 && accuracy >= threshold) || (i === 1 && accuracy >= 90) || (i === 2 && accuracy >= 95)
+      (i === 0 && accuracy >= threshold) ||
+      (i === 1 && accuracy >= STAR_2_THRESHOLD) ||
+      (i === 2 && accuracy >= STAR_3_THRESHOLD)
 
     if (shouldBeActive) {
       star.classList.add('active')
