@@ -1154,7 +1154,7 @@ dependencies = [
 
 [[package]]
 name = "hangul-typing"
-version = "0.4.1"
+version = "0.4.2"
 dependencies = [
  "copilot-sdk",
  "once_cell",
