@@ -79,15 +79,13 @@ pub async fn copilot_init() -> CommandResponse<CopilotStatus> {
 
     // Try to initialize
     match copilot::init().await {
-        Ok(()) => {
-            CommandResponse::ok(CopilotStatus {
-                available: true,
-                running: true,
-                cli_installed: true,
-                cli_authenticated: true,
-                message: "AI assistant ready".to_string(),
-            })
-        }
+        Ok(()) => CommandResponse::ok(CopilotStatus {
+            available: true,
+            running: true,
+            cli_installed: true,
+            cli_authenticated: true,
+            message: "AI assistant ready".to_string(),
+        }),
         Err(e) => {
             let (cli_installed, cli_authenticated, message) = match &e {
                 CopilotError::CliNotFound => (
@@ -150,7 +148,9 @@ pub async fn copilot_ask(
     let service = copilot::get_service();
 
     if !service.is_running().await {
-        return CommandResponse::err("AI assistant not running. Copilot CLI may not be installed.".to_string());
+        return CommandResponse::err(
+            "AI assistant not running. Copilot CLI may not be installed.".to_string(),
+        );
     }
 
     match service.ask(&prompt, context).await {
@@ -212,7 +212,10 @@ pub async fn copilot_analyze_mistake(
     expected: String,
     actual: String,
 ) -> CommandResponse<AssistantResponse> {
-    debug!("Copilot analyze: expected='{}', actual='{}'", expected, actual);
+    debug!(
+        "Copilot analyze: expected='{}', actual='{}'",
+        expected, actual
+    );
 
     let service = copilot::get_service();
 

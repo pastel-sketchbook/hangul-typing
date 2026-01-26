@@ -6,7 +6,9 @@
 //! The feature is conditionally enabled based on whether GitHub Copilot CLI
 //! is installed and authenticated on the user's machine.
 
-use copilot_sdk::{Client, SessionConfig, SessionEventData, SystemMessageConfig, SystemMessageMode};
+use copilot_sdk::{
+    Client, SessionConfig, SessionEventData, SystemMessageConfig, SystemMessageMode,
+};
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 use std::process::Command;
@@ -23,9 +25,13 @@ static COPILOT_SERVICE: OnceCell<CopilotService> = OnceCell::new();
 pub enum CopilotError {
     #[error("Copilot service not initialized")]
     NotInitialized,
-    #[error("GitHub Copilot CLI not found. Please install it from https://docs.github.com/en/copilot/github-copilot-in-the-cli")]
+    #[error(
+        "GitHub Copilot CLI not found. Please install it from https://docs.github.com/en/copilot/github-copilot-in-the-cli"
+    )]
     CliNotFound,
-    #[error("GitHub Copilot CLI not authenticated. Run 'gh auth login' and 'gh extension install github/gh-copilot'")]
+    #[error(
+        "GitHub Copilot CLI not authenticated. Run 'gh auth login' and 'gh extension install github/gh-copilot'"
+    )]
     NotAuthenticated,
     #[error("Failed to start Copilot client: {0}")]
     StartFailed(String),
@@ -87,9 +93,7 @@ fn is_copilot_cli_installed() -> bool {
 /// Note: `gh auth status` returns non-zero if ANY account has issues,
 /// even if the active account is fine. So we check the output text instead.
 fn is_gh_authenticated() -> bool {
-    let output = Command::new("gh")
-        .args(["auth", "status"])
-        .output();
+    let output = Command::new("gh").args(["auth", "status"]).output();
 
     match output {
         Ok(o) => {
@@ -218,23 +222,17 @@ When the user asks about typing a character or word, explain which English keys 
 
         debug!("Starting Copilot client with stdio transport...");
 
-        let client = Client::builder()
-            .use_stdio(true)
-            .build()
-            .map_err(|e| {
-                error!("Failed to build client: {}", e);
-                CopilotError::StartFailed(e.to_string())
-            })?;
+        let client = Client::builder().use_stdio(true).build().map_err(|e| {
+            error!("Failed to build client: {}", e);
+            CopilotError::StartFailed(e.to_string())
+        })?;
 
         debug!("Client built, starting...");
 
-        client
-            .start()
-            .await
-            .map_err(|e| {
-                error!("Failed to start client: {}", e);
-                CopilotError::StartFailed(e.to_string())
-            })?;
+        client.start().await.map_err(|e| {
+            error!("Failed to start client: {}", e);
+            CopilotError::StartFailed(e.to_string())
+        })?;
 
         *client_lock = Some(client);
         *self.is_running.write().await = true;
@@ -299,13 +297,10 @@ When the user asks about typing a character or word, explain which English keys 
             ..Default::default()
         };
 
-        let session = client
-            .create_session(config)
-            .await
-            .map_err(|e| {
-                error!("Failed to create session: {}", e);
-                CopilotError::SessionFailed(e.to_string())
-            })?;
+        let session = client.create_session(config).await.map_err(|e| {
+            error!("Failed to create session: {}", e);
+            CopilotError::SessionFailed(e.to_string())
+        })?;
 
         debug!("Session created, subscribing to events...");
 
@@ -315,13 +310,10 @@ When the user asks about typing a character or word, explain which English keys 
         debug!("Sending message ({} chars)...", full_prompt.len());
 
         // Send the message
-        let message_id = session
-            .send(full_prompt.as_str())
-            .await
-            .map_err(|e| {
-                error!("Failed to send message: {}", e);
-                CopilotError::SendFailed(e.to_string())
-            })?;
+        let message_id = session.send(full_prompt.as_str()).await.map_err(|e| {
+            error!("Failed to send message: {}", e);
+            CopilotError::SendFailed(e.to_string())
+        })?;
 
         debug!("Message sent (id={}), waiting for response...", message_id);
 

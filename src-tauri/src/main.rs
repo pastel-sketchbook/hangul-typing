@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-  hangul_typing_lib::run();
+    hangul_typing_lib::run();
 }

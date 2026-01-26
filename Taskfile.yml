@@ -38,6 +38,8 @@ tasks:
 
   run:dev:
     desc: Run Tauri desktop app in development mode
+    dir: src-tauri
+    deps: [fmt:rust, lint:rust]
     cmds:
       - cargo tauri dev
 
@@ -91,8 +93,22 @@ tasks:
       - zig fmt server/build.zig
 
   # Tauri tasks
+  fmt:rust:
+    desc: Check Rust formatting
+    dir: src-tauri
+    cmds:
+      - cargo fmt --check
+
+  lint:rust:
+    desc: Run Clippy linter on Rust code
+    dir: src-tauri
+    cmds:
+      - cargo clippy -- -D warnings
+
   build:tauri:
     desc: Build Tauri desktop app for macOS (release)
+    dir: src-tauri
+    deps: [fmt:rust, lint:rust]
     cmds:
       - cargo tauri build
 

@@ -1,6 +1,6 @@
 use tauri::Manager;
 use tracing::info;
-use tracing_subscriber::{fmt, prelude::*, EnvFilter};
+use tracing_subscriber::{EnvFilter, fmt, prelude::*};
 
 mod commands;
 mod copilot;
