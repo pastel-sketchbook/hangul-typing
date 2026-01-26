@@ -1169,11 +1169,16 @@ footer a:hover {
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(94, 179, 179, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Fade animation */
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s,
+    box-shadow 0.2s;
 }
 
 .assistant-toggle:hover {
@@ -1186,7 +1191,10 @@ footer a:hover {
 }
 
 .assistant-toggle.hidden {
-  display: none;
+  opacity: 0;
+  transform: scale(0.9);
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* Panel container */
@@ -1204,11 +1212,18 @@ footer a:hover {
   flex-direction: column;
   z-index: 101;
   overflow: hidden;
-  transition: opacity 0.2s, transform 0.2s;
+  /* Slide-in animation */
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out, visibility 0.25s;
 }
 
 .assistant-panel.hidden {
-  display: none;
+  opacity: 0;
+  transform: translateX(20px);
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* Panel header */
