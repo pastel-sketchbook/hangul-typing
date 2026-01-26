@@ -2,24 +2,24 @@
  * Local storage persistence for game progress
  */
 
-import type { SavedProgress } from './types';
+import type { SavedProgress } from './types'
 
-const STORAGE_KEY = 'hangul-typing-progress';
+const STORAGE_KEY = 'hangul-typing-progress'
 
 /**
  * Load saved progress from localStorage
  */
 export function loadProgress(): number[] {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
-      const data = JSON.parse(saved) as SavedProgress;
-      return data.unlockedLevels ?? [1];
+      const data = JSON.parse(saved) as SavedProgress
+      return data.unlockedLevels ?? [1]
     }
   } catch (err) {
-    console.warn('Failed to load progress:', err);
+    console.warn('Failed to load progress:', err)
   }
-  return [1];
+  return [1]
 }
 
 /**
@@ -32,9 +32,9 @@ export function saveProgress(unlockedLevels: number[]): void {
       JSON.stringify({
         unlockedLevels,
       }),
-    );
+    )
   } catch (err) {
-    console.warn('Failed to save progress:', err);
+    console.warn('Failed to save progress:', err)
   }
 }
 
@@ -43,8 +43,8 @@ export function saveProgress(unlockedLevels: number[]): void {
  */
 export function clearProgress(): void {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY)
   } catch (err) {
-    console.warn('Failed to clear progress:', err);
+    console.warn('Failed to clear progress:', err)
   }
 }

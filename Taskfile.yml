@@ -7,17 +7,20 @@ vars:
 tasks:
   default:
     desc: Build WASM module and TypeScript
+    deps: [check:all]
     cmds:
       - zig build
       - bun run build
 
   build:wasm:
     desc: Build WASM module
+    deps: [check:all]
     cmds:
       - zig build wasm
 
   build:ts:
     desc: Build TypeScript app
+    deps: [check:all]
     cmds:
       - bun run build
 
@@ -66,6 +69,11 @@ tasks:
     desc: Run all tests
     cmds:
       - zig build test
+
+  check:all:
+    desc: Run linting, formatting checks, and tests with coverage
+    cmds:
+      - bun run check:all
 
   clean:
     desc: Clean build artifacts

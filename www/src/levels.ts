@@ -2,7 +2,7 @@
  * Level definitions and target generation
  */
 
-import type { LevelData } from './types';
+import type { LevelData } from './types'
 
 /** All level definitions */
 export const levels: Record<number, LevelData> = {
@@ -51,36 +51,35 @@ export const levels: Record<number, LevelData> = {
     chars: ['오늘 날씨가 좋아요', '한국어를 배워요'],
     threshold: 75,
   },
-};
+}
 
 /** Total number of levels */
-export const LEVEL_COUNT = 9;
+export const LEVEL_COUNT = 9
 
 /** Number of targets per level */
-export const TARGETS_PER_LEVEL = 20;
+export const TARGETS_PER_LEVEL = 20
 
 /**
  * Generate random targets for a level
  */
 export function generateTargets(level: number): string[] {
-  const levelData = levels[level];
+  const levelData = levels[level]
   if (!levelData) {
-    throw new Error(`Invalid level: ${level}`);
+    throw new Error(`Invalid level: ${level}`)
   }
 
-  const targets: string[] = [];
+  const targets: string[] = []
   for (let i = 0; i < TARGETS_PER_LEVEL; i++) {
-    const char =
-      levelData.chars[Math.floor(Math.random() * levelData.chars.length)];
-    targets.push(char);
+    const char = levelData.chars[Math.floor(Math.random() * levelData.chars.length)]
+    targets.push(char)
   }
 
-  return targets;
+  return targets
 }
 
 /**
  * Get level threshold for passing
  */
 export function getLevelThreshold(level: number): number {
-  return levels[level]?.threshold ?? 80;
+  return levels[level]?.threshold ?? 80
 }
