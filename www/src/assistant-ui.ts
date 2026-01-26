@@ -132,6 +132,22 @@ function setupEventListeners(): void {
       togglePanel();
     }
   });
+
+  // Click outside to close panel
+  document.addEventListener('click', (e) => {
+    if (!elements) return;
+    const target = e.target as HTMLElement;
+
+    // Ignore if panel is hidden
+    if (elements.panel.classList.contains('hidden')) return;
+
+    // Ignore clicks inside panel or on toggle button
+    if (elements.panel.contains(target) || elements.toggle.contains(target)) {
+      return;
+    }
+
+    hidePanel();
+  });
 }
 
 /**
