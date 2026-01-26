@@ -162,6 +162,51 @@
         </footer>
     </div>
 
+    <!-- AI Assistant Panel (Copilot) -->
+    <aside id="assistant-panel" class="assistant-panel hidden">
+        <div class="assistant-header">
+            <h3>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+                AI Assistant
+            </h3>
+            <button id="assistant-close" class="icon-btn" title="Close assistant">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="assistant-messages" id="assistant-messages">
+            <div class="assistant-welcome">
+                <p>Hi! I'm your Korean typing tutor. Ask me anything about Hangul!</p>
+                <div class="quick-actions">
+                    <button class="quick-action" data-action="explain-target">Explain current character</button>
+                    <button class="quick-action" data-action="get-hint">Give me a hint</button>
+                    <button class="quick-action" data-action="how-to-type">How do I type this?</button>
+                </div>
+            </div>
+        </div>
+        <div class="assistant-input-area">
+            <input type="text" id="assistant-input" placeholder="Ask about Korean typing..." autocomplete="off">
+            <button id="assistant-send" class="icon-btn" title="Send">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="assistant-status" id="assistant-status"></div>
+    </aside>
+
+    <!-- Assistant Toggle Button -->
+    <button id="assistant-toggle" class="assistant-toggle hidden" title="AI Assistant (?)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+        </svg>
+    </button>
+
     <script type="module" src="dist/app.js"></script>
 </body>
 </html>

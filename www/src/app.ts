@@ -6,6 +6,7 @@
  * a pure TypeScript fallback for environments where WASM is unavailable.
  */
 
+import { initAssistant, recordMistake, updateContext } from './assistant-ui';
 import { type IHangulIme, createIme } from './hangul-ime-loader';
 import { KeyboardHighlighter } from './keyboard';
 import { LEVEL_COUNT, generateTargets, getLevelThreshold } from './levels';
@@ -85,6 +86,11 @@ async function init(): Promise<void> {
 
   // Show app
   showApp();
+
+  // Initialize AI assistant (Copilot)
+  initAssistant().catch((err) => {
+    console.warn('Failed to initialize AI assistant:', err);
+  });
 
   // Close Tauri splash after delay
   closeSplashAfterDelay(splashStart, splashMinTime);
@@ -255,6 +261,15 @@ function startLevel(level: number): void {
     inputBuffer: '',
   };
 
+  // Update AI assistant context
+  updateContext({
+    currentLevel: level,
+    currentTarget: session.targets[0],
+    userInput: '',
+    accuracy: 1.0,
+    totalAttempts: 0,
+  });
+
   updateGameDisplay();
   setScreen('game');
 }
@@ -275,6 +290,8 @@ function submitInput(): void {
     showFeedback(elements.feedback, 'Correct!', 'correct');
   } else {
     showFeedback(elements.feedback, `Expected: ${target}`, 'incorrect');
+    // Record mistake for AI context
+    recordMistake(target, input);
   }
 
   session.inputBuffer = '';
@@ -339,6 +356,14 @@ function updateGameDisplay(): void {
   elements.feedback.className = 'feedback';
 
   keyboard.highlightForTarget(target);
+
+  // Update AI assistant context
+  updateContext({
+    currentTarget: target,
+    userInput: session.inputBuffer,
+    accuracy: session.total > 0 ? session.correct / session.total : 1.0,
+    totalAttempts: session.total,
+  });
 }
 
 function setScreen(screenName: ScreenName): void {

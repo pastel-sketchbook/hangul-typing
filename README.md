@@ -11,12 +11,28 @@ A gamified typing trainer designed for non-Korean speakers. Progress through lev
 - **Level-based progression** - Start from basic jamo and advance to full sentences
 - **Game mechanics** - Score points, break levels, track your improvement
 - **Instant feedback** - Real-time Hangul composition as you type
+- **AI Assistant** - GitHub Copilot-powered tutor for contextual help (desktop app only)
 
 ## Screenshots
 
 | Level Selection                                  | Typing                               |
 |--------------------------------------------------|--------------------------------------|
 | ![Level Selection](screenshots/level-select.png) | ![Typing](screenshots/typing.png)    |
+
+## AI Assistant (Desktop Only)
+
+The desktop app includes an optional AI-powered Korean typing tutor, powered by GitHub Copilot:
+
+- **Contextual explanations** - Ask about any Hangul character or syllable
+- **Typing hints** - Get help when you're stuck on a character
+- **Mistake analysis** - Understand what went wrong and how to fix it
+- **Natural language Q&A** - Ask anything about Korean typing
+
+**Requirements:**
+- GitHub Copilot CLI installed (`copilot` or `gh copilot`)
+- GitHub CLI authenticated (`gh auth login`)
+
+The assistant is automatically enabled when Copilot is available. Without it, the app works normally - AI features are entirely optional.
 
 ## Design Principles
 
@@ -29,12 +45,13 @@ A gamified typing trainer designed for non-Korean speakers. Progress through lev
 
 ## Tech Stack
 
-| Layer    | Technology         |
-|----------|--------------------|
-| Core     | Zig                |
-| Runtime  | WebAssembly        |
-| Desktop  | Tauri (macOS)      |
-| Frontend | HTML / CSS / JS    |
+| Layer     | Technology         |
+|-----------|--------------------|
+| Core      | Zig                |
+| Runtime   | WebAssembly        |
+| Desktop   | Tauri (macOS)      |
+| Frontend  | HTML / CSS / JS    |
+| AI        | GitHub Copilot SDK |
 
 Powered by [hangul.wasm](https://github.com/pastel-sketchbook/hangul-wasm) for Hangul decomposition, composition, and IME.
 
@@ -58,6 +75,9 @@ task run:dev
 
 # Run as web app
 task run:web
+
+# Run with debug logging (shows Copilot internals)
+RUST_LOG=debug task run:dev
 ```
 
 ### Building

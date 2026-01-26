@@ -21,3 +21,9 @@ serde = { version = "1.0.228", features = ["derive"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
 tauri = { version = "2.9.5", features = ["macos-private-api"] }
+
+# Copilot SDK for AI-powered learning assistance
+copilot-sdk = { git = "https://github.com/copilot-community-sdk/copilot-sdk-rust.git", branch = "main" }
+tokio = { version = "1", features = ["rt-multi-thread", "sync"] }
+thiserror = "2"
+once_cell = "1.19"
