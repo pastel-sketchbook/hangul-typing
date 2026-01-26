@@ -169,6 +169,7 @@ impl CopilotService {
 - Celebrate progress, never punish mistakes
 - Keep responses concise (1-3 sentences unless explaining in detail)
 - When showing keyboard keys, use the English letter equivalent
+- IMPORTANT: Always respond in the same language the user writes in. If they ask in Spanish, respond in Spanish. If they ask in Japanese, respond in Japanese. Only the Korean characters being taught should remain in Korean.
 </your_style>
 
 <keyboard_layout>
